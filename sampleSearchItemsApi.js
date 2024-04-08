@@ -20,21 +20,23 @@
  * For more details, refer:
  * https://webservices.amazon.com/paapi5/documentation/search-items.html
  */
-
+const express = require('express'); 
+require('dotenv').config();
+// const process = require('process');
+const app = express();
 var ProductAdvertisingAPIv1 = require('./src/index');
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
 
-// Specify your credentials here. These are used to create and sign the request.
-defaultClient.accessKey = '<YOUR ACCESS KEY>';
-defaultClient.secretKey = '<YOUR SECRET KEY>';
+defaultClient.accessKey = process.env.ACCESS_KEY;
+defaultClient.secretKey = process.env.SECRET_KEY;
 
 /**
  * PAAPI Host and Region to which you want to send request.
  * For more details refer: https://webservices.amazon.com/paapi5/documentation/common-request-parameters.html#host-and-region
  */
-defaultClient.host = 'webservices.amazon.com';
-defaultClient.region = 'us-east-1';
+defaultClient.host = process.env.HOST;
+defaultClient.region = process.env.REGION;
 
 var api = new ProductAdvertisingAPIv1.DefaultApi();
 
@@ -43,20 +45,21 @@ var api = new ProductAdvertisingAPIv1.DefaultApi();
 var searchItemsRequest = new ProductAdvertisingAPIv1.SearchItemsRequest();
 
 /** Enter your partner tag (store/tracking id) and partner type */
-searchItemsRequest['PartnerTag'] = '<YOUR PARTNER TAG>';
+searchItemsRequest['PartnerTag'] =  process.env.PARTNER_TAG;
 searchItemsRequest['PartnerType'] = 'Associates';
 
 /** Specify Keywords */
-searchItemsRequest['Keywords'] = 'Harry Potter';
+// searchItemsRequest['Keywords'] = 'Harry Potter';
 
 /**
  * Specify the category in which search request is to be made
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/use-cases/organization-of-items-on-amazon/search-index.html
  */
-searchItemsRequest['SearchIndex'] = 'Books';
+// searchItemsRequest['SearchIndex'] = 'Books';
 
 /** Specify item count to be returned in search result */
-searchItemsRequest['ItemCount'] = 2;
+searchItemsRequest['ItemCount'] = 10;
+searchItemsRequest['BrowseNodeId'] = process.env.BROWSE_NODE_ID;
 
 /**
  * Choose resources you want from SearchItemsResource enum
@@ -114,11 +117,24 @@ function onError(error) {
   }
 }
 
-api.searchItems(searchItemsRequest).then(
-  function(data) {
-    onSuccess(data);
-  },
-  function(error) {
-    onError(error);
+
+
+app.get("/", (req, res) => {
+  try {
+      console.log("ログ定期実行")
+      api.searchItems(searchItemsRequest).then(
+        function(data) {
+          onSuccess(data);
+        },
+        function(error) {
+          onError(error);
+        }
+      );
+  } catch (err) {
+      console.log(err);
   }
-);
+  res.send('get');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);

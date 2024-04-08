@@ -26,15 +26,15 @@ var ProductAdvertisingAPIv1 = require('./src/index');
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
 
 // Specify your credentials here. These are used to create and sign the request.
-defaultClient.accessKey = '<YOUR ACCESS KEY>';
-defaultClient.secretKey = '<YOUR SECRET KEY>';
+defaultClient.accessKey = process.env.ACCESS_KEY;
+defaultClient.secretKey = process.env.SECRET_KEY;
 
 /**
  * PAAPI Host and Region to which you want to send request.
  * For more details refer: https://webservices.amazon.com/paapi5/documentation/common-request-parameters.html#host-and-region
  */
-defaultClient.host = 'webservices.amazon.com';
-defaultClient.region = 'us-east-1';
+defaultClient.host = process.env.HOST;
+defaultClient.region = process.env.REGION;
 
 var api = new ProductAdvertisingAPIv1.DefaultApi();
 
@@ -43,7 +43,7 @@ var api = new ProductAdvertisingAPIv1.DefaultApi();
 var getVariationsRequest = new ProductAdvertisingAPIv1.GetVariationsRequest();
 
 /** Enter your partner tag (store/tracking id) and partner type */
-getVariationsRequest['PartnerTag'] = '<YOUR PARTNER TAG>';
+getVariationsRequest['PartnerTag']  = process.env.PARTNER_TAG;
 getVariationsRequest['PartnerType'] = 'Associates';
 
 /** Specify ASIN for which variations are desired */
