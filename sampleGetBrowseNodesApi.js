@@ -22,7 +22,7 @@
  */
 
 var ProductAdvertisingAPIv1 = require('./src/index');
-
+require('dotenv').config();
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
 
 // Specify your credentials here. These are used to create and sign the request.
@@ -47,14 +47,14 @@ getBrowseNodesRequest['PartnerTag']  = process.env.PARTNER_TAG;
 getBrowseNodesRequest['PartnerType'] = 'Associates';
 
 /** Specify browse node id(s) */
-getBrowseNodesRequest['BrowseNodeIds'] = ['3040', '0', '3045'];
+getBrowseNodesRequest['BrowseNodeIds'] = ['2188762051'];
 
 /** Specify the item count to be returned in search result */
 /**
  * Specify the language code in which you want the information to be returned.
  * For more information and valid values for each locale, refer https://webservices.amazon.com/paapi5/documentation/locale-reference.html
  */
-getBrowseNodesRequest['LanguagesOfPreference'] = ['es_US'];
+getBrowseNodesRequest['LanguagesOfPreference'] = ['ja_JP'];
 
 /**
  * Choose resources you want from GetBrowseNodesResource enum

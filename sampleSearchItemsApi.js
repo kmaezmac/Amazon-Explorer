@@ -122,14 +122,22 @@ function onError(error) {
 app.get("/", (req, res) => {
   try {
       console.log("ログ定期実行")
-      api.searchItems(searchItemsRequest).then(
-        function(data) {
-          onSuccess(data);
-        },
-        function(error) {
-          onError(error);
-        }
-      );
+  } catch (err) {
+      console.log(err);
+  }
+  res.send('get');
+});
+
+app.get("/search", (req, res) => {
+  try {
+    api.searchItems(searchItemsRequest).then(
+      function(data) {
+        onSuccess(data);
+      },
+      function(error) {
+        onError(error);
+      }
+    );
   } catch (err) {
       console.log(err);
   }
