@@ -59,8 +59,8 @@ searchItemsRequest['PartnerType'] = 'Associates';
 
 /** Specify item count to be returned in search result */
 searchItemsRequest['ItemCount'] = 10;
-searchItemsRequest['BrowseNodeId'] = process.env.BROWSE_NODE_ID;
 
+searchItemsRequest['SortBy'] = "Featured";
 /**
  * Choose resources you want from SearchItemsResource enum
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/search-items.html#resources-parameter
@@ -70,31 +70,40 @@ searchItemsRequest['Resources'] = ['Images.Primary.Medium', 'ItemInfo.Title', 'O
 function onSuccess(data) {
   console.log('API called successfully.');
   var searchItemsResponse = ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
-  console.log('Complete Response: \n' + JSON.stringify(searchItemsResponse, null, 1));
+  let responses =[];
+  // console.log('Complete Response: \n' + JSON.stringify(searchItemsResponse, null, 1));
   if (searchItemsResponse['SearchResult'] !== undefined) {
-    console.log('Printing First Item Information in SearchResult:');
-    var item_0 = searchItemsResponse['SearchResult']['Items'][0];
-    if (item_0 !== undefined) {
-      if (item_0['ASIN'] !== undefined) {
-        console.log('ASIN: ' + item_0['ASIN']);
-      }
-      if (item_0['DetailPageURL'] !== undefined) {
-        console.log('DetailPageURL: ' + item_0['DetailPageURL']);
-      }
-      if (
-        item_0['ItemInfo'] !== undefined &&
-        item_0['ItemInfo']['Title'] !== undefined &&
-        item_0['ItemInfo']['Title']['DisplayValue'] !== undefined
-      ) {
-        console.log('Title: ' + item_0['ItemInfo']['Title']['DisplayValue']);
-      }
-      if (
-        item_0['Offers'] !== undefined &&
-        item_0['Offers']['Listings'] !== undefined &&
-        item_0['Offers']['Listings'][0]['Price'] !== undefined &&
-        item_0['Offers']['Listings'][0]['Price']['DisplayAmount'] !== undefined
-      ) {
-        console.log('Buying Price: ' + item_0['Offers']['Listings'][0]['Price']['DisplayAmount']);
+    console.log(searchItemsResponse['SearchResult']['Items'].length)
+    // console.log('Printing First Item Information in SearchResult:');
+    for(var i = 0; i < searchItemsResponse['SearchResult']['Items'].length; i++){
+      var item_0 = searchItemsResponse['SearchResult']['Items'][i];
+      if (item_0 !== undefined) {
+        // if (item_0['ASIN'] !== undefined) {
+        //   console.log('ASIN: ' + item_0['ASIN']);
+        // }
+        if (item_0['DetailPageURL'] !== undefined &&
+            item_0['ItemInfo'] !== undefined &&
+            item_0['ItemInfo']['Title'] !== undefined &&
+            item_0['ItemInfo']['Title']['DisplayValue'] !== undefined &&
+            item_0['Offers'] !== undefined &&
+            item_0['Offers']['Listings'] !== undefined &&
+            item_0['Offers']['Listings'][0]['Price'] !== undefined &&
+            item_0['Offers']['Listings'][0]['Price']['Savings'] !== undefined &&
+            item_0['Offers']['Listings'][0]['Price']['Savings']['Percentage'] !== undefined
+        ) {
+          var url = item_0['DetailPageURL'];
+          var title = item_0['ItemInfo']['Title']['DisplayValue'];
+          var percentage = item_0['Offers']['Listings'][0]['Price']['Savings']['Percentage']
+          var response = {
+            url:url,
+            title:title,
+            precentage:percentage
+          }
+          console.log('DetailPageURL: ' + url);
+          console.log('Title: ' + title);
+          console.log('Percentage: ' + percentage);
+          responses.push(response);
+        }
       }
     }
   }
@@ -106,6 +115,7 @@ function onSuccess(data) {
     console.log('Error Code: ' + error_0['Code']);
     console.log('Error Message: ' + error_0['Message']);
   }
+  return responses;
 }
 
 function onError(error) {
@@ -116,8 +126,6 @@ function onError(error) {
     console.log('Error Object: ' + JSON.stringify(error['response']['text'], null, 1));
   }
 }
-
-
 
 app.get("/", (req, res) => {
   try {
@@ -130,9 +138,23 @@ app.get("/", (req, res) => {
 
 app.get("/search", (req, res) => {
   try {
+    const nodes =[
+      "2151981051",
+      "2422738051",
+      "71589051",
+      "71443051",
+      "2221074051",
+      "2221070051",
+      "2131417051",
+      "2221071051",
+      "2131478051",
+      "5519723051"
+  ]
+    searchItemsRequest['BrowseNodeId'] = nodes[Math.floor(Math.random()* nodes.length)];
     api.searchItems(searchItemsRequest).then(
       function(data) {
-        onSuccess(data);
+        var responses = onSuccess(data);
+        res.send(JSON.stringify(responses));
       },
       function(error) {
         onError(error);
@@ -141,7 +163,7 @@ app.get("/search", (req, res) => {
   } catch (err) {
       console.log(err);
   }
-  res.send('get');
+  // res.send('get');
 });
 
 const PORT = process.env.PORT || 3000;
