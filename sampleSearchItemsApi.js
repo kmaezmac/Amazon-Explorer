@@ -97,7 +97,7 @@ function onSuccess(data) {
           var response = {
             url:url,
             title:title,
-            precentage:percentage
+            percentage:percentage
           }
           console.log('DetailPageURL: ' + url);
           console.log('Title: ' + title);
