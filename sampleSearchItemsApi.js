@@ -227,7 +227,10 @@ app.get("/search2", (req, res) => {
   try {
     const nodes =[
       "24580150051",
-      "3550442051"
+      "3550442051",
+      "8136408051",
+      "2291657051",
+      "3251934051"
   ]
     searchItemsRequest['BrowseNodeId'] = nodes[Math.floor(Math.random()* nodes.length)];
     api.searchItems(searchItemsRequest).then(
