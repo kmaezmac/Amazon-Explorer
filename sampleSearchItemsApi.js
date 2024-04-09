@@ -176,7 +176,72 @@ app.get("/search", (req, res) => {
   } catch (err) {
       console.log(err);
   }
-  // res.send('get');
+});
+
+function onSuccess2(data) {
+  console.log('API called successfully.');
+  var searchItemsResponse = ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
+  let responses =[];
+  if (searchItemsResponse['SearchResult'] !== undefined) {
+    console.log(searchItemsResponse['SearchResult']['Items'].length)
+    for(var i = 0; i < searchItemsResponse['SearchResult']['Items'].length; i++){
+      var item_0 = searchItemsResponse['SearchResult']['Items'][i];
+      if (item_0 !== undefined) {
+        if (item_0['DetailPageURL'] !== undefined &&
+            item_0['ItemInfo'] !== undefined &&
+            item_0['ItemInfo']['Title'] !== undefined &&
+            item_0['ItemInfo']['Title']['DisplayValue'] !== undefined &&
+            item_0['Offers'] !== undefined &&
+            item_0['Offers']['Listings'] !== undefined &&
+            item_0['Offers']['Listings'][0]['Price'] !== undefined &&
+            item_0['Offers']['Listings'][0]['Price']['Amount'] !== undefined
+        ) {
+          var url = item_0['DetailPageURL'];
+          var title = item_0['ItemInfo']['Title']['DisplayValue'];
+          var price = item_0['Offers']['Listings'][0]['Price']['Amount']
+          var response = {
+            url:url,
+            title:title,
+            price:price
+          }
+          console.log('DetailPageURL: ' + url);
+          console.log('Title: ' + title);
+          console.log('Price: ' + price);
+          responses.push(response);
+        }
+      }
+    }
+  }
+  if (searchItemsResponse['Errors'] !== undefined) {
+    console.log('Errors:');
+    console.log('Complete Error Response: ' + JSON.stringify(searchItemsResponse['Errors'], null, 1));
+    console.log('Printing 1st Error:');
+    var error_0 = searchItemsResponse['Errors'][0];
+    console.log('Error Code: ' + error_0['Code']);
+    console.log('Error Message: ' + error_0['Message']);
+  }
+  return responses;
+}
+
+app.get("/search2", (req, res) => {
+  try {
+    const nodes =[
+      "24580150051",
+      "3550442051"
+  ]
+    searchItemsRequest['BrowseNodeId'] = nodes[Math.floor(Math.random()* nodes.length)];
+    api.searchItems(searchItemsRequest).then(
+      function(data) {
+        var responses = onSuccess2(data);
+        res.send(JSON.stringify(responses));
+      },
+      function(error) {
+        onError(error);
+      }
+    );
+  } catch (err) {
+      console.log(err);
+  }
 });
 
 const PORT = process.env.PORT || 3000;
