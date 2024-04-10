@@ -20,6 +20,7 @@
  * For more details, refer:
  * https://webservices.amazon.com/paapi5/documentation/get-items.html
  */
+require('dotenv').config();
 var ProductAdvertisingAPIv1 = require('./src/index');
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
@@ -46,7 +47,7 @@ getItemsRequest['PartnerTag'] = process.env.PARTNER_TAG;
 getItemsRequest['PartnerType'] = 'Associates';
 
 /** Enter the Item IDs for which item information is desired */
-getItemsRequest['ItemIds'] = ['059035342X', 'B00X4WHP5E', 'B00ZV9RDKK'];
+getItemsRequest['ItemIds'] = ['B00U71TBKC'];
 
 getItemsRequest['Condition'] = 'New';
 

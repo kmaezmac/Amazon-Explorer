@@ -271,8 +271,6 @@ function onSuccess3(data) {
             item_0['ItemInfo'] !== undefined &&
             item_0['ItemInfo']['Title'] !== undefined &&
             item_0['ItemInfo']['Title']['DisplayValue'] !== undefined &&
-            item_0['ItemInfo']['Title']['Manufacturer'] !== undefined &&
-            item_0['ItemInfo']['Title']['Manufacturer']['DisplayValue'] !== undefined &&
             item_0['Offers'] !== undefined &&
             item_0['Offers']['Listings'] !== undefined &&
             item_0['Offers']['Listings'][0]['Price'] !== undefined &&
@@ -283,21 +281,18 @@ function onSuccess3(data) {
           var url = item_0['DetailPageURL'];
           var title = item_0['ItemInfo']['Title']['DisplayValue'];
           var discount = item_0['Offers']['Listings'][0]['Price']['Savings']['DisplayAmount'];
-          var maker = item_0['ItemInfo']['Title']['Manufacturer']['DisplayValue'];
           var image = item_0['Images']['Primary']['Medium']['URL'];
           var price = item_0['Offers']['Listings'][0]['Price']['DisplayAmount'];
           var response = {
             url:url,
             title:title,
             discount:discount,
-            maker:maker,
             image:image,
             price:price,
           }
           console.log('DetailPageURL: ' + url);
           console.log('Title: ' + title);
           console.log('Discount: ' + discount);
-          console.log('Maker: ' + maker);
           console.log('Image: ' + image);
           console.log('Price: ' + price);
           responses.push(response);
