@@ -47,7 +47,7 @@ getBrowseNodesRequest['PartnerTag']  = process.env.PARTNER_TAG;
 getBrowseNodesRequest['PartnerType'] = 'Associates';
 
 /** Specify browse node id(s) */
-getBrowseNodesRequest['BrowseNodeIds'] = ['3251934051'];
+getBrowseNodesRequest['BrowseNodeIds'] = ['2123629051'];
 
 /** Specify the item count to be returned in search result */
 /**
