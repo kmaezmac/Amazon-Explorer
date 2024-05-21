@@ -238,78 +238,12 @@ app.get("/search", (req, res) => {
     api.searchItems(searchItemsRequest).then(
       function(data) {
         var responses = onSuccess(data);
-        res.send(JSON.stringify(responses));
-      },
-      function(error) {
-        onError(error);
-      }
-    );
-  } catch (err) {
-      console.log(err);
-  }
-});
-
-// twitter用 kindle
-function onSuccess2(data) {
-  console.log('API called successfully.');
-  var searchItemsResponse = ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
-  let responses =[];
-  if (searchItemsResponse['SearchResult'] !== undefined) {
-    console.log(searchItemsResponse['SearchResult']['Items'].length)
-    for(var i = 0; i < searchItemsResponse['SearchResult']['Items'].length; i++){
-      var item_0 = searchItemsResponse['SearchResult']['Items'][i];
-      if (item_0 !== undefined) {
-        if (item_0['DetailPageURL'] !== undefined &&
-            item_0['ItemInfo'] !== undefined &&
-            item_0['ItemInfo']['Title'] !== undefined &&
-            item_0['ItemInfo']['Title']['DisplayValue'] !== undefined &&
-            item_0['Offers'] !== undefined &&
-            item_0['Offers']['Listings'] !== undefined &&
-            item_0['Offers']['Listings'][0]['Price'] !== undefined &&
-            item_0['Offers']['Listings'][0]['Price']['Amount'] !== undefined
-        ) {
-          var url = item_0['DetailPageURL'];
-          var title = item_0['ItemInfo']['Title']['DisplayValue'];
-          var price = item_0['Offers']['Listings'][0]['Price']['Amount']
-          var response = {
-            url:url,
-            title:title,
-            price:price
-          }
-          console.log('DetailPageURL: ' + url);
-          console.log('Title: ' + title);
-          console.log('Price: ' + price);
-          responses.push(response);
+        var randomResponse = responses[Math.floor(Math.random() * (responses.length))];
+        var tweetText = "【" + randomResponse.percentage +"%オフ" + "】 " + randomResponse.url + randomResponse.title.substring(0,90) + " #タイムセール #Amazon #PR"
+        var response = {
+          tweetText:tweetText
         }
-      }
-    }
-  }
-  if (searchItemsResponse['Errors'] !== undefined) {
-    console.log('Errors:');
-    console.log('Complete Error Response: ' + JSON.stringify(searchItemsResponse['Errors'], null, 1));
-    console.log('Printing 1st Error:');
-    var error_0 = searchItemsResponse['Errors'][0];
-    console.log('Error Code: ' + error_0['Code']);
-    console.log('Error Message: ' + error_0['Message']);
-  }
-  return responses;
-}
-
-// twitter用 kindle
-app.get("/search2", (req, res) => {
-  try {
-    const kindles =[
-      "24580150051",
-      "3550442051",
-      "8136408051",
-      "2291657051",
-      "3251934051"
-  ]
-    searchItemsRequest['BrowseNodeId'] = kindles[Math.floor(Math.random()* kindles.length)];
-    api.searchItems(searchItemsRequest).then(
-      function(data) {
-        var responses = onSuccess2(data);
-        res.send(JSON.stringify(responses));
+        res.send(JSON.stringify(response));
       },
       function(error) {
         onError(error);
@@ -319,6 +253,77 @@ app.get("/search2", (req, res) => {
       console.log(err);
   }
 });
+
+// twitter用 kindle
+// function onSuccess2(data) {
+//   console.log('API called successfully.');
+//   var searchItemsResponse = ProductAdvertisingAPIv1.SearchItemsResponse.constructFromObject(data);
+//   let responses =[];
+//   if (searchItemsResponse['SearchResult'] !== undefined) {
+//     console.log(searchItemsResponse['SearchResult']['Items'].length)
+//     for(var i = 0; i < searchItemsResponse['SearchResult']['Items'].length; i++){
+//       var item_0 = searchItemsResponse['SearchResult']['Items'][i];
+//       if (item_0 !== undefined) {
+//         if (item_0['DetailPageURL'] !== undefined &&
+//             item_0['ItemInfo'] !== undefined &&
+//             item_0['ItemInfo']['Title'] !== undefined &&
+//             item_0['ItemInfo']['Title']['DisplayValue'] !== undefined &&
+//             item_0['Offers'] !== undefined &&
+//             item_0['Offers']['Listings'] !== undefined &&
+//             item_0['Offers']['Listings'][0]['Price'] !== undefined &&
+//             item_0['Offers']['Listings'][0]['Price']['Amount'] !== undefined
+//         ) {
+//           var url = item_0['DetailPageURL'];
+//           var title = item_0['ItemInfo']['Title']['DisplayValue'];
+//           var price = item_0['Offers']['Listings'][0]['Price']['Amount']
+//           var response = {
+//             url:url,
+//             title:title,
+//             price:price
+//           }
+//           console.log('DetailPageURL: ' + url);
+//           console.log('Title: ' + title);
+//           console.log('Price: ' + price);
+//           responses.push(response);
+//         }
+//       }
+//     }
+//   }
+//   if (searchItemsResponse['Errors'] !== undefined) {
+//     console.log('Errors:');
+//     console.log('Complete Error Response: ' + JSON.stringify(searchItemsResponse['Errors'], null, 1));
+//     console.log('Printing 1st Error:');
+//     var error_0 = searchItemsResponse['Errors'][0];
+//     console.log('Error Code: ' + error_0['Code']);
+//     console.log('Error Message: ' + error_0['Message']);
+//   }
+//   return responses;
+// }
+
+// twitter用 kindle
+// app.get("/search2", (req, res) => {
+//   try {
+//     const kindles =[
+//       "24580150051",
+//       "3550442051",
+//       "8136408051",
+//       "2291657051",
+//       "3251934051"
+//   ]
+//     searchItemsRequest['BrowseNodeId'] = kindles[Math.floor(Math.random()* kindles.length)];
+//     api.searchItems(searchItemsRequest).then(
+//       function(data) {
+//         var responses = onSuccess2(data);
+//         res.send(JSON.stringify(responses));
+//       },
+//       function(error) {
+//         onError(error);
+//       }
+//     );
+//   } catch (err) {
+//       console.log(err);
+//   }
+// });
 
 // ブログ用 kindle以外
 function onSuccess3(data) {

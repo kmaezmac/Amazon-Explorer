@@ -55,7 +55,7 @@ getItemsRequest['Condition'] = 'New';
  * Choose resources you want from GetItemsResource enum
  * For more details, refer: https://webservices.amazon.com/paapi5/documentation/get-items.html#resources-parameter
  */
-getItemsRequest['Resources'] = ['Images.Primary.Medium', 'ItemInfo.Title', 'Offers.Listings.Price'];
+getItemsRequest['Resources'] = ['Images.Primary.Medium', 'ItemInfo.Title', 'Offers.Listings.Price', 'ItemInfo.Features'];
 
 /**
  * Function to parse GetItemsResponse into an object with key as ASIN
