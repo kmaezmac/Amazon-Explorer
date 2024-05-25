@@ -239,6 +239,14 @@ app.get("/search", (req, res) => {
       function(data) {
         var responses = onSuccess(data);
         var randomResponse = responses[Math.floor(Math.random() * (responses.length))];
+        if(randomResponse == undefined
+          || randomResponse.percentage == undefined
+          || randomResponse.url == undefined
+          || randomResponse.title == undefined
+        )
+        {
+          return;
+        }
         var tweetText = "【" + randomResponse.percentage +"%オフ" + "】 " + randomResponse.url + randomResponse.title.substring(0,90) + " #タイムセール #Amazon #PR"
         var response = {
           tweetText:tweetText
