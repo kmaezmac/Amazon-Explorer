@@ -21,9 +21,11 @@
  * https://webservices.amazon.com/paapi5/documentation/search-items.html
  */
 const express = require('express'); 
+const cors = require('cors'); // ← 追加
 require('dotenv').config();
 // const process = require('process');
 const app = express();
+app.use(cors()); // ← CORSを許可
 var ProductAdvertisingAPIv1 = require('./src/index');
 
 var defaultClient = ProductAdvertisingAPIv1.ApiClient.instance;
