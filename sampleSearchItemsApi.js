@@ -133,10 +133,11 @@ function onError(error) {
 app.get("/", (req, res) => {
   try {
       console.log("ログ定期実行")
+      res.status(200).json({ message: "ok" });
   } catch (err) {
       console.log(err);
+      res.status(500).json({ error: "API error", detail: error });
   }
-  res.send('get');
 });
 
 // kindle以外
